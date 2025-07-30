@@ -18,6 +18,24 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+    flavorDimensions += "version"
+
+    productFlavors {
+        create("first-flavor") {
+            dimension = "version"
+            applicationIdSuffix = ".khales"
+            versionNameSuffix = "-khales"
+        }
+
+        create("second-flavor") {
+            dimension = "version"
+            applicationIdSuffix = ".amani"
+            versionNameSuffix = "-amani"
+        }
+    }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
