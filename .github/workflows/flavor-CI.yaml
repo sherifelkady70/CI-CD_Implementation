@@ -1,0 +1,40 @@
+name: Android CI (Single Flavor)
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: 'Select the product flavor'
+        required: true
+        default: 'firstFlavor'
+        type: choice
+        options:
+          - firstFlavor
+          - secondFlavor
+
+jobs:
+  build:
+    name: Build Selected Flavor APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Grant permission to execute gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build Selected Flavor APK
+        run: ./gradlew assemble${{ github.event.inputs.flavor }}Debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.flavor }}-debug-apk
+          path: app/build/outputs/apk/${{ github.event.inputs.flavor }}/debug/app-${{ github.event.inputs.flavor }}-debug.apk
